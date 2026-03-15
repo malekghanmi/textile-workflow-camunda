@@ -1,0 +1,176 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "9b0b274"
+  },
+  "schemaVersion": 19,
+  "id": "form-concevoir-modele",
+  "components": [
+    {
+      "text": "# Conception du Modèle - Bureau d'Études",
+      "type": "text",
+      "id": "title1",
+      "layout": {
+        "row": "Row_1xjxigm"
+      }
+    },
+    {
+      "label": "Numéro de commande",
+      "type": "textfield",
+      "key": "numeroCommande",
+      "readonly": true,
+      "id": "field-numcmd",
+      "layout": {
+        "row": "Row_0xwg6lr"
+      }
+    },
+    {
+      "label": "Type de vêtement",
+      "type": "textfield",
+      "key": "typeVetement",
+      "readonly": true,
+      "id": "field-vetement",
+      "layout": {
+        "row": "Row_1symc5t"
+      }
+    },
+    {
+      "label": "Référence du modèle",
+      "type": "textfield",
+      "key": "referenceModele",
+      "validate": {
+        "required": true
+      },
+      "id": "field-refmodele",
+      "layout": {
+        "row": "Row_0qjz1ci"
+      }
+    },
+    {
+      "label": "Taille standard",
+      "values": [
+        {
+          "label": "XS",
+          "value": "XS"
+        },
+        {
+          "label": "S",
+          "value": "S"
+        },
+        {
+          "label": "M",
+          "value": "M"
+        },
+        {
+          "label": "L",
+          "value": "L"
+        },
+        {
+          "label": "XL",
+          "value": "XL"
+        },
+        {
+          "label": "XXL",
+          "value": "XXL"
+        },
+        {
+          "label": "Sur mesure",
+          "value": "sur_mesure"
+        }
+      ],
+      "type": "select",
+      "key": "taille",
+      "validate": {
+        "required": true
+      },
+      "id": "field-taille",
+      "layout": {
+        "row": "Row_14evrmn"
+      }
+    },
+    {
+      "label": "Type de tissu requis",
+      "values": [
+        {
+          "label": "Coton",
+          "value": "coton"
+        },
+        {
+          "label": "Polyester",
+          "value": "polyester"
+        },
+        {
+          "label": "Lin",
+          "value": "lin"
+        },
+        {
+          "label": "Soie",
+          "value": "soie"
+        },
+        {
+          "label": "Laine",
+          "value": "laine"
+        },
+        {
+          "label": "Mélange",
+          "value": "melange"
+        }
+      ],
+      "type": "select",
+      "key": "typeTissu",
+      "validate": {
+        "required": true
+      },
+      "id": "field-tissu",
+      "layout": {
+        "row": "Row_1el9sku"
+      }
+    },
+    {
+      "label": "Couleur(s) principale(s)",
+      "type": "textfield",
+      "key": "couleur",
+      "validate": {
+        "required": true
+      },
+      "id": "field-couleur",
+      "layout": {
+        "row": "Row_08s3sph"
+      }
+    },
+    {
+      "label": "Accessoires requis (boutons, fermetures, etc.)",
+      "type": "textarea",
+      "key": "accessoiresRequis",
+      "id": "field-accessoires",
+      "layout": {
+        "row": "Row_13i675i"
+      }
+    },
+    {
+      "label": "Spécifications techniques du modèle",
+      "type": "textarea",
+      "key": "specifications",
+      "validate": {
+        "required": true
+      },
+      "id": "field-specs",
+      "layout": {
+        "row": "Row_153iqhc"
+      }
+    },
+    {
+      "label": "Modification demandée ?",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_0qjm1o3",
+        "columns": null
+      },
+      "id": "Field_12ccu4r",
+      "key": "modif"
+    }
+  ],
+  "type": "default"
+}

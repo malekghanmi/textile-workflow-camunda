@@ -1,0 +1,80 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "80a5306"
+  },
+  "schemaVersion": 19,
+  "id": "form-expedier-matieres",
+  "components": [
+    {
+      "text": "# Expedition Matieres - Fournisseur",
+      "type": "text",
+      "id": "t1"
+    },
+    {
+      "label": "Reference commande",
+      "type": "textfield",
+      "key": "numeroCommande",
+      "readonly": true,
+      "id": "f1"
+    },
+    {
+      "label": "Agent responsable",
+      "type": "textfield",
+      "key": "agentExpedition",
+      "validate": {
+        "required": true
+      },
+      "id": "f2"
+    },
+    {
+      "label": "Transporteur",
+      "values": [
+        {
+          "label": "DHL Express",
+          "value": "DHL"
+        },
+        {
+          "label": "Chronopost",
+          "value": "chronopost"
+        },
+        {
+          "label": "UPS",
+          "value": "UPS"
+        },
+        {
+          "label": "FedEx",
+          "value": "fedex"
+        }
+      ],
+      "type": "select",
+      "key": "transporteurMatiere",
+      "validate": {
+        "required": true
+      },
+      "id": "f3"
+    },
+    {
+      "label": "Numero de suivi",
+      "type": "textfield",
+      "key": "numeroSuiviMatiere",
+      "validate": {
+        "required": true
+      },
+      "id": "f4"
+    },
+    {
+      "subtype": "date",
+      "type": "datetime",
+      "key": "dateExpeditionMatiere",
+      "label": "Date expedition",
+      "validate": {
+        "required": true
+      },
+      "id": "f5"
+    }
+  ],
+  "type": "default"
+}

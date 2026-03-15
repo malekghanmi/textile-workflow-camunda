@@ -1,0 +1,6 @@
+com\textile\fournisseur\workers\ConfirmerCommandeErpWorker.class
+com\textile\fournisseur\models\Matiere.class
+com\textile\fournisseur\services\NotificationService.class
+com\textile\fournisseur\workers\EnvoyerNotificationLivraisonWorker.class
+com\textile\fournisseur\FournisseurApplication.class
+com\textile\fournisseur\controller\StartFournisseurController.class

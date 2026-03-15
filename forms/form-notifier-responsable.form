@@ -1,0 +1,43 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "80a5306"
+  },
+  "schemaVersion": 19,
+  "id": "form-notifier-responsable",
+  "components": [
+    {
+      "text": "# Notification Responsable Production",
+      "type": "text",
+      "id": "t1"
+    },
+    {
+      "label": "Reference commande",
+      "type": "textfield",
+      "key": "numeroCommande",
+      "readonly": true,
+      "id": "f1"
+    },
+    {
+      "label": "Responsable notifie",
+      "type": "textfield",
+      "key": "responsableNotifie",
+      "validate": {
+        "required": true
+      },
+      "id": "f2"
+    },
+    {
+      "label": "Message de notification",
+      "type": "textarea",
+      "key": "messageNotification",
+      "validate": {
+        "required": true
+      },
+      "id": "f3"
+    }
+  ],
+  "type": "default"
+}

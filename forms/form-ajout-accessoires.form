@@ -1,0 +1,89 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "9b0b274"
+  },
+  "schemaVersion": 16,
+  "id": "form-ajout-accessoires",
+  "type": "default",
+  "components": [
+    {
+      "type": "text",
+      "text": "# Ajout des Accessoires - Atelier Couture",
+      "id": "title1"
+    },
+    {
+      "type": "textfield",
+      "key": "numeroCommande",
+      "label": "Référence commande",
+      "readonly": true,
+      "id": "field-numcmd"
+    },
+    {
+      "type": "textfield",
+      "key": "operateurAccessoires",
+      "label": "Opérateur responsable",
+      "validate": {
+        "required": true
+      },
+      "id": "field-operateur"
+    },
+    {
+      "type": "checkbox",
+      "key": "boutonsPoses",
+      "label": "Boutons posés",
+      "id": "field-boutons"
+    },
+    {
+      "type": "checkbox",
+      "key": "fermetureEclair",
+      "label": "Fermeture éclair installée",
+      "id": "field-fermeture"
+    },
+    {
+      "type": "checkbox",
+      "key": "etiquettesPosees",
+      "label": "Étiquettes posées (marque, taille, entretien)",
+      "id": "field-etiquettes"
+    },
+    {
+      "type": "checkbox",
+      "key": "doublureInstallee",
+      "label": "Doublure installée",
+      "id": "field-doublure"
+    },
+    {
+      "type": "textarea",
+      "key": "autresAccessoires",
+      "label": "Autres accessoires ajoutés",
+      "id": "field-autres"
+    },
+    {
+      "type": "select",
+      "key": "etatFinition",
+      "label": "État général de la finition",
+      "validate": {
+        "required": true
+      },
+      "values": [
+        {
+          "label": "✅ Prêt pour contrôle qualité",
+          "value": "pret"
+        },
+        {
+          "label": "⚠️ Retouches accessoires nécessaires",
+          "value": "retouches"
+        }
+      ],
+      "id": "field-etat"
+    },
+    {
+      "type": "textarea",
+      "key": "remarquesFinition",
+      "label": "Remarques finales",
+      "id": "field-remarques"
+    }
+  ]
+}

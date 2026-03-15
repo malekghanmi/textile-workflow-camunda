@@ -1,0 +1,60 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "80a5306"
+  },
+  "schemaVersion": 19,
+  "id": "form-verifier-disponibilite",
+  "components": [
+    {
+      "text": "# Verification Disponibilite - Fournisseur",
+      "type": "text",
+      "id": "t1"
+    },
+    {
+      "label": "Reference commande",
+      "type": "textfield",
+      "key": "numeroCommande",
+      "readonly": true,
+      "id": "f1"
+    },
+    {
+      "label": "Type de tissu demande",
+      "type": "textfield",
+      "key": "typeTissu",
+      "readonly": true,
+      "id": "f2"
+    },
+    {
+      "label": "Agent responsable",
+      "type": "textfield",
+      "key": "agentVerification",
+      "validate": {
+        "required": true
+      },
+      "id": "f3"
+    },
+    {
+      "label": "Matiere disponible ?",
+      "values": [
+        {
+          "label": "Oui - Disponible",
+          "value": true
+        },
+        {
+          "label": "Non - Indisponible",
+          "value": false
+        }
+      ],
+      "type": "radio",
+      "key": "disponible",
+      "validate": {
+        "required": true
+      },
+      "id": "f4"
+    }
+  ],
+  "type": "default"
+}

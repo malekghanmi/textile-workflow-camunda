@@ -1,0 +1,118 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "80a5306"
+  },
+  "schemaVersion": 19,
+  "id": "form-enregistrer-commande",
+  "components": [
+    {
+      "text": "# Enregistrement Commande Client",
+      "type": "text",
+      "id": "title1"
+    },
+    {
+      "label": "Numero de commande",
+      "type": "textfield",
+      "key": "numeroCommande",
+      "validate": {
+        "required": true
+      },
+      "id": "f1"
+    },
+    {
+      "label": "Nom du client",
+      "type": "textfield",
+      "key": "nomClient",
+      "validate": {
+        "required": true
+      },
+      "id": "f2"
+    },
+    {
+      "label": "Email du client",
+      "type": "textfield",
+      "key": "emailClient",
+      "validate": {
+        "required": true
+      },
+      "id": "f3"
+    },
+    {
+      "label": "Type de vetement",
+      "type": "textfield",
+      "key": "typeVetement",
+      "validate": {
+        "required": true
+      },
+      "id": "f4"
+    },
+    {
+      "label": "Quantite",
+      "type": "number",
+      "key": "quantite",
+      "validate": {
+        "required": true,
+        "min": 1
+      },
+      "id": "f5"
+    },
+    {
+      "label": "Priorite",
+      "values": [
+        {
+          "label": "Normale",
+          "value": "normale"
+        },
+        {
+          "label": "Urgente",
+          "value": "urgente"
+        }
+      ],
+      "type": "select",
+      "key": "priorite",
+      "validate": {
+        "required": true
+      },
+      "id": "f6"
+    },
+    {
+      "label": "Remarques",
+      "type": "textarea",
+      "key": "remarques",
+      "id": "f7"
+    },
+    {
+      "subtype": "date",
+      "type": "datetime",
+      "key": "dateLivraisonSouhaitee",
+      "label": "Date livraison souhaitee",
+      "validate": {
+        "required": true
+      },
+      "id": "f8"
+    },
+    {
+      "label": "Validation de la commande",
+      "values": [
+        {
+          "label": "Commande valide",
+          "value": true
+        },
+        {
+          "label": "Commande rejetee",
+          "value": false
+        }
+      ],
+      "type": "radio",
+      "key": "commandeValide",
+      "validate": {
+        "required": true
+      },
+      "id": "f9"
+    }
+  ],
+  "type": "default"
+}

@@ -1,0 +1,107 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "9b0b274"
+  },
+  "schemaVersion": 16,
+  "id": "form-decoupe-tissu",
+  "type": "default",
+  "components": [
+    {
+      "type": "text",
+      "text": "# Découpe du Tissu - Atelier de Coupe",
+      "id": "title1"
+    },
+    {
+      "type": "textfield",
+      "key": "numeroCommande",
+      "label": "Référence commande",
+      "readonly": true,
+      "id": "field-numcmd"
+    },
+    {
+      "type": "textfield",
+      "key": "referenceModele",
+      "label": "Référence modèle",
+      "readonly": true,
+      "id": "field-modele"
+    },
+    {
+      "type": "textfield",
+      "key": "taille",
+      "label": "Taille",
+      "readonly": true,
+      "id": "field-taille"
+    },
+    {
+      "type": "textfield",
+      "key": "operateurDecoupe",
+      "label": "Opérateur responsable",
+      "validate": {
+        "required": true
+      },
+      "id": "field-operateur"
+    },
+    {
+      "type": "number",
+      "key": "quantiteDecoupee",
+      "label": "Quantité de pièces découpées",
+      "validate": {
+        "required": true,
+        "min": 1
+      },
+      "id": "field-qdecoupe"
+    },
+    {
+      "type": "number",
+      "key": "metresTissuUtilises",
+      "label": "Mètres de tissu utilisés",
+      "validate": {
+        "required": true,
+        "min": 0.1
+      },
+      "id": "field-metres"
+    },
+    {
+      "type": "datetime",
+      "key": "dateDecoupe",
+      "label": "Date de découpe",
+      "subtype": "date",
+      "validate": {
+        "required": true
+      },
+      "id": "field-date"
+    },
+    {
+      "type": "select",
+      "key": "qualiteTissuConformite",
+      "label": "Qualité du tissu reçu",
+      "validate": {
+        "required": true
+      },
+      "values": [
+        {
+          "label": "✅ Conforme",
+          "value": "conforme"
+        },
+        {
+          "label": "⚠️ Défauts mineurs",
+          "value": "defauts_mineurs"
+        },
+        {
+          "label": "❌ Non conforme",
+          "value": "non_conforme"
+        }
+      ],
+      "id": "field-qualite"
+    },
+    {
+      "type": "textarea",
+      "key": "observationsDecoupe",
+      "label": "Observations / Anomalies constatées",
+      "id": "field-obs"
+    }
+  ]
+}

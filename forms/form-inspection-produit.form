@@ -1,0 +1,157 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "dd55451"
+  },
+  "schemaVersion": 19,
+  "id": "form-inspection-produit",
+  "components": [
+    {
+      "text": "# Inspection Produit - Controle Qualite",
+      "type": "text",
+      "id": "title1"
+    },
+    {
+      "label": "Reference commande",
+      "type": "textfield",
+      "key": "numeroCommande",
+      "readonly": true,
+      "id": "field-numcmd"
+    },
+    {
+      "label": "Reference modele",
+      "type": "textfield",
+      "key": "referenceModele",
+      "readonly": true,
+      "id": "field-modele"
+    },
+    {
+      "label": "Nom de l'inspecteur",
+      "type": "textfield",
+      "key": "inspecteur",
+      "validate": {
+        "required": true
+      },
+      "id": "field-inspecteur"
+    },
+    {
+      "subtype": "date",
+      "type": "datetime",
+      "key": "dateInspection",
+      "label": "Date d'inspection",
+      "validate": {
+        "required": true
+      },
+      "id": "field-date"
+    },
+    {
+      "text": "### Criteres de controle",
+      "type": "text",
+      "id": "text-criteres"
+    },
+    {
+      "label": "Coutures",
+      "values": [
+        {
+          "label": "Conforme",
+          "value": "conforme"
+        },
+        {
+          "label": "Non conforme",
+          "value": "non_conforme"
+        }
+      ],
+      "type": "select",
+      "key": "conformiteCoutures",
+      "validate": {
+        "required": true
+      },
+      "id": "field-coutures"
+    },
+    {
+      "label": "Dimensions / Taille",
+      "values": [
+        {
+          "label": "Conforme",
+          "value": "conforme"
+        },
+        {
+          "label": "Non conforme",
+          "value": "non_conforme"
+        }
+      ],
+      "type": "select",
+      "key": "conformiteDimensions",
+      "validate": {
+        "required": true
+      },
+      "id": "field-dims"
+    },
+    {
+      "label": "Accessoires",
+      "values": [
+        {
+          "label": "Conforme",
+          "value": "conforme"
+        },
+        {
+          "label": "Non conforme",
+          "value": "non_conforme"
+        }
+      ],
+      "type": "select",
+      "key": "conformiteAccessoires",
+      "validate": {
+        "required": true
+      },
+      "id": "field-acc"
+    },
+    {
+      "label": "Couleur / Motif",
+      "values": [
+        {
+          "label": "Conforme",
+          "value": "conforme"
+        },
+        {
+          "label": "Non conforme",
+          "value": "non_conforme"
+        }
+      ],
+      "type": "select",
+      "key": "conformiteCouleur",
+      "validate": {
+        "required": true
+      },
+      "id": "field-couleur"
+    },
+    {
+      "label": "Defauts constates (si non conforme)",
+      "type": "textarea",
+      "key": "defautsConstates",
+      "id": "field-defauts"
+    },
+    {
+      "label": "Decision finale",
+      "values": [
+        {
+          "label": "✅ Produit CONFORME - Passer a l'emballage",
+          "value": true
+        },
+        {
+          "label": "❌ Produit NON CONFORME - Retour en fabrication",
+          "value": false
+        }
+      ],
+      "type": "radio",
+      "key": "conforme",
+      "validate": {
+        "required": true
+      },
+      "id": "field-decision"
+    }
+  ],
+  "type": "default"
+}

@@ -1,0 +1,92 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "9b0b274"
+  },
+  "schemaVersion": 16,
+  "id": "form-commander-matieres",
+  "type": "default",
+  "components": [
+    {
+      "type": "text",
+      "text": "# Commande de Matières Premières - Système ERP",
+      "id": "title1"
+    },
+    {
+      "type": "textfield",
+      "key": "numeroCommande",
+      "label": "Référence commande client",
+      "readonly": true,
+      "id": "field-numcmd"
+    },
+    {
+      "type": "textfield",
+      "key": "typeTissu",
+      "label": "Type de tissu",
+      "readonly": true,
+      "id": "field-tissu"
+    },
+    {
+      "type": "textfield",
+      "key": "fournisseurSelectionne",
+      "label": "Fournisseur sélectionné",
+      "validate": {
+        "required": true
+      },
+      "id": "field-fourn"
+    },
+    {
+      "type": "number",
+      "key": "quantiteTissu",
+      "label": "Quantité de tissu à commander (mètres)",
+      "validate": {
+        "required": true,
+        "min": 0.1
+      },
+      "id": "field-qtissu"
+    },
+    {
+      "type": "textfield",
+      "key": "referenceMatiere",
+      "label": "Référence matière",
+      "validate": {
+        "required": true
+      },
+      "id": "field-refmat"
+    },
+    {
+      "type": "textarea",
+      "key": "autresMatieres",
+      "label": "Autres matières à commander (accessoires, fils, etc.)",
+      "id": "field-autres"
+    },
+    {
+      "type": "datetime",
+      "key": "dateLivraisonSouhaitee",
+      "label": "Date de livraison souhaitée",
+      "subtype": "date",
+      "validate": {
+        "required": true
+      },
+      "id": "field-datelivr"
+    },
+    {
+      "type": "number",
+      "key": "budgetEstime",
+      "label": "Budget estimé (€)",
+      "validate": {
+        "required": true,
+        "min": 0
+      },
+      "id": "field-budget"
+    },
+    {
+      "type": "textarea",
+      "key": "instructionsSpeciales",
+      "label": "Instructions spéciales pour le fournisseur",
+      "id": "field-instructions"
+    }
+  ]
+}

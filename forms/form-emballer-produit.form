@@ -1,0 +1,104 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "9b0b274"
+  },
+  "schemaVersion": 19,
+  "id": "form-emballer-produit",
+  "components": [
+    {
+      "text": "# Emballage du Produit - Logistique",
+      "type": "text",
+      "id": "title1"
+    },
+    {
+      "label": "Reference commande",
+      "type": "textfield",
+      "key": "numeroCommande",
+      "readonly": true,
+      "id": "field-numcmd"
+    },
+    {
+      "label": "Nom du client",
+      "type": "textfield",
+      "key": "nomClient",
+      "readonly": true,
+      "id": "field-client"
+    },
+    {
+      "label": "Agent responsable emballage",
+      "type": "textfield",
+      "key": "agentEmballage",
+      "validate": {
+        "required": true
+      },
+      "id": "field-agent"
+    },
+    {
+      "label": "Type emballage",
+      "values": [
+        {
+          "label": "Boite carton standard",
+          "value": "carton_standard"
+        },
+        {
+          "label": "Boite cadeau premium",
+          "value": "boite_cadeau"
+        },
+        {
+          "label": "Sachet plastique",
+          "value": "sachet"
+        },
+        {
+          "label": "Emballage personnalise",
+          "value": "personnalise"
+        }
+      ],
+      "type": "select",
+      "key": "typeEmballage",
+      "validate": {
+        "required": true
+      },
+      "id": "field-type"
+    },
+    {
+      "label": "Bon de livraison inclus",
+      "type": "checkbox",
+      "key": "bonLivraisonInclus",
+      "id": "field-bon"
+    },
+    {
+      "label": "Etiquette adresse collee",
+      "type": "checkbox",
+      "key": "etiquetteAdresseCollee",
+      "id": "field-etiquette"
+    },
+    {
+      "label": "Poids du colis (kg)",
+      "type": "textfield",
+      "key": "poidsColis",
+      "validate": {
+        "required": true
+      },
+      "id": "field-poids"
+    },
+    {
+      "label": "Dimensions colis (L x l x H en cm)",
+      "type": "textfield",
+      "key": "dimensionsColis",
+      "validate": {
+        "required": true
+      },
+      "id": "field-dims"
+    },
+    {
+      "label": "Instructions speciales livraison",
+      "type": "textarea",
+      "key": "instructionsLivraison",
+      "id": "field-instructions"
+    }
+  ],
+  "type": "default"
+}

@@ -1,0 +1,43 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "80a5306"
+  },
+  "schemaVersion": 19,
+  "id": "form-notifier-service-it",
+  "components": [
+    {
+      "text": "# Notification Service IT - Erreur ERP",
+      "type": "text",
+      "id": "t1"
+    },
+    {
+      "label": "Reference commande",
+      "type": "textfield",
+      "key": "numeroCommande",
+      "readonly": true,
+      "id": "f1"
+    },
+    {
+      "label": "Agent IT notifie",
+      "type": "textfield",
+      "key": "agentIT",
+      "validate": {
+        "required": true
+      },
+      "id": "f2"
+    },
+    {
+      "label": "Description erreur ERP",
+      "type": "textarea",
+      "key": "descriptionErreur",
+      "validate": {
+        "required": true
+      },
+      "id": "f3"
+    }
+  ],
+  "type": "default"
+}

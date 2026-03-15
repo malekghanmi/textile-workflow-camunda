@@ -1,0 +1,127 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "9b0b274"
+  },
+  "schemaVersion": 16,
+  "id": "form-couture-principale",
+  "type": "default",
+  "components": [
+    {
+      "type": "text",
+      "text": "# Couture Principale - Atelier Couture",
+      "id": "title1"
+    },
+    {
+      "type": "textfield",
+      "key": "numeroCommande",
+      "label": "Référence commande",
+      "readonly": true,
+      "id": "field-numcmd"
+    },
+    {
+      "type": "textfield",
+      "key": "operateurCouture",
+      "label": "Opérateur couturier",
+      "validate": {
+        "required": true
+      },
+      "id": "field-operateur"
+    },
+    {
+      "type": "select",
+      "key": "typeCouture",
+      "label": "Type de couture utilisé",
+      "validate": {
+        "required": true
+      },
+      "values": [
+        {
+          "label": "Couture simple",
+          "value": "simple"
+        },
+        {
+          "label": "Surjet",
+          "value": "surjet"
+        },
+        {
+          "label": "Couture anglaise",
+          "value": "anglaise"
+        },
+        {
+          "label": "Point de croix",
+          "value": "croix"
+        }
+      ],
+      "id": "field-type"
+    },
+    {
+      "type": "select",
+      "key": "machineCouture",
+      "label": "Machine utilisée",
+      "validate": {
+        "required": true
+      },
+      "values": [
+        {
+          "label": "Machine 1",
+          "value": "M1"
+        },
+        {
+          "label": "Machine 2",
+          "value": "M2"
+        },
+        {
+          "label": "Machine 3",
+          "value": "M3"
+        },
+        {
+          "label": "Machine 4",
+          "value": "M4"
+        }
+      ],
+      "id": "field-machine"
+    },
+    {
+      "type": "number",
+      "key": "tempsRealise",
+      "label": "Temps de réalisation (minutes)",
+      "validate": {
+        "required": true,
+        "min": 1
+      },
+      "id": "field-temps"
+    },
+    {
+      "type": "select",
+      "key": "qualiteCouture",
+      "label": "Qualité de la couture",
+      "validate": {
+        "required": true
+      },
+      "values": [
+        {
+          "label": "✅ Excellente",
+          "value": "excellente"
+        },
+        {
+          "label": "👍 Bonne",
+          "value": "bonne"
+        },
+        {
+          "label": "⚠️ À améliorer",
+          "value": "ameliorer"
+        }
+      ],
+      "id": "field-qualite"
+    },
+    {
+      "type": "textarea",
+      "key": "observationsCouture",
+      "label": "Observations",
+      "id": "field-obs"
+    }
+  ]
+}

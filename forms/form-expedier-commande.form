@@ -1,0 +1,149 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "80a5306"
+  },
+  "schemaVersion": 19,
+  "id": "form-expedier-commande",
+  "components": [
+    {
+      "text": "# Expedition de la Commande - Logistique",
+      "type": "text",
+      "id": "title1"
+    },
+    {
+      "label": "Reference commande",
+      "type": "textfield",
+      "key": "numeroCommande",
+      "readonly": true,
+      "id": "field-numcmd"
+    },
+    {
+      "label": "Nom du client",
+      "type": "textfield",
+      "key": "nomClient",
+      "readonly": true,
+      "id": "field-client"
+    },
+    {
+      "label": "Adresse de livraison",
+      "type": "textfield",
+      "key": "adresseLivraison",
+      "validate": {
+        "required": true
+      },
+      "id": "field-adresse"
+    },
+    {
+      "label": "Transporteur",
+      "values": [
+        {
+          "label": "DHL Express",
+          "value": "DHL"
+        },
+        {
+          "label": "Chronopost",
+          "value": "chronopost"
+        },
+        {
+          "label": "La Poste Colissimo",
+          "value": "colissimo"
+        },
+        {
+          "label": "UPS",
+          "value": "UPS"
+        },
+        {
+          "label": "FedEx",
+          "value": "fedex"
+        },
+        {
+          "label": "Transport interne",
+          "value": "interne"
+        }
+      ],
+      "type": "select",
+      "key": "transporteur",
+      "validate": {
+        "required": true
+      },
+      "id": "field-transporteur"
+    },
+    {
+      "label": "Numero de suivi tracking",
+      "type": "textfield",
+      "key": "numeroSuivi",
+      "validate": {
+        "required": true
+      },
+      "id": "field-tracking"
+    },
+    {
+      "subtype": "date",
+      "type": "datetime",
+      "key": "dateExpedition",
+      "label": "Date expedition",
+      "validate": {
+        "required": true
+      },
+      "id": "field-dateexp"
+    },
+    {
+      "subtype": "date",
+      "type": "datetime",
+      "key": "dateLivraisonEstimee",
+      "label": "Date livraison estimee",
+      "validate": {
+        "required": true
+      },
+      "id": "field-dateestim"
+    },
+    {
+      "label": "Mode de livraison",
+      "values": [
+        {
+          "label": "Express - Urgente",
+          "value": true
+        },
+        {
+          "label": "Standard - Normale",
+          "value": false
+        }
+      ],
+      "type": "radio",
+      "key": "urgent",
+      "validate": {
+        "required": true
+      },
+      "id": "field-urgent"
+    },
+    {
+      "label": "Notes expedition",
+      "type": "textarea",
+      "key": "notesExpedition",
+      "id": "field-notes"
+    },
+    {
+      "label": "Retour produit ?",
+      "values": [
+        {
+          "label": "Non - Livraison acceptee",
+          "value": false
+        },
+        {
+          "label": "Oui - Retour demande",
+          "value": true
+        }
+      ],
+      "type": "radio",
+      "key": "retour",
+      "validate": {
+        "required": true
+      },
+      "id": "field-retour"
+    }
+  ],
+  "type": "default"
+}

@@ -1,0 +1,57 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "80a5306"
+  },
+  "schemaVersion": 19,
+  "id": "form-preparer-matieres",
+  "components": [
+    {
+      "text": "# Preparation Matieres - Fournisseur",
+      "type": "text",
+      "id": "t1"
+    },
+    {
+      "label": "Reference commande",
+      "type": "textfield",
+      "key": "numeroCommande",
+      "readonly": true,
+      "id": "f1"
+    },
+    {
+      "label": "Type de tissu",
+      "type": "textfield",
+      "key": "typeTissu",
+      "readonly": true,
+      "id": "f2"
+    },
+    {
+      "label": "Agent responsable",
+      "type": "textfield",
+      "key": "agentPreparation",
+      "validate": {
+        "required": true
+      },
+      "id": "f3"
+    },
+    {
+      "label": "Quantite preparee (metres)",
+      "type": "number",
+      "key": "quantitePreparee",
+      "validate": {
+        "required": true,
+        "min": 0.1
+      },
+      "id": "f4"
+    },
+    {
+      "label": "Notes preparation",
+      "type": "textarea",
+      "key": "notesPreparation",
+      "id": "f5"
+    }
+  ],
+  "type": "default"
+}

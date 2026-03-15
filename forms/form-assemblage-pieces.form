@@ -1,0 +1,73 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "9b0b274"
+  },
+  "schemaVersion": 16,
+  "id": "form-assemblage-pieces",
+  "type": "default",
+  "components": [
+    {
+      "type": "text",
+      "text": "# Assemblage des Pièces - Atelier Couture",
+      "id": "title1"
+    },
+    {
+      "type": "textfield",
+      "key": "numeroCommande",
+      "label": "Référence commande",
+      "readonly": true,
+      "id": "field-numcmd"
+    },
+    {
+      "type": "textfield",
+      "key": "operateurAssemblage",
+      "label": "Opérateur responsable",
+      "validate": {
+        "required": true
+      },
+      "id": "field-operateur"
+    },
+    {
+      "type": "number",
+      "key": "nbPiecesAssemblees",
+      "label": "Nombre de pièces assemblées",
+      "validate": {
+        "required": true,
+        "min": 1
+      },
+      "id": "field-pieces"
+    },
+    {
+      "type": "select",
+      "key": "etatAssemblage",
+      "label": "État de l'assemblage",
+      "validate": {
+        "required": true
+      },
+      "values": [
+        {
+          "label": "✅ Assemblage correct",
+          "value": "correct"
+        },
+        {
+          "label": "⚠️ Retouches nécessaires",
+          "value": "retouches"
+        },
+        {
+          "label": "❌ Pièces défectueuses",
+          "value": "defectueux"
+        }
+      ],
+      "id": "field-etat"
+    },
+    {
+      "type": "textarea",
+      "key": "notesAssemblage",
+      "label": "Notes sur l'assemblage",
+      "id": "field-notes"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+com\textile\usine\models\Facture.class
+com\textile\usine\UsineApplication.class
+com\textile\usine\workers\CommanderMatieresPremieresWorker.class
+com\textile\usine\services\ErpService.class
+com\textile\usine\workers\EnvoyerCommandeMatiereWorker.class
+com\textile\usine\services\StockService.class
+com\textile\usine\models\Commande.class
+com\textile\usine\workers\CalculerBesoinsWorker.class
+com\textile\usine\exceptions\ErpException.class
+com\textile\usine\controller\StartUsineController.class
+com\textile\usine\services\FactureService.class
+com\textile\usine\workers\MajStatutProductionWorker.class
+com\textile\usine\workers\GenererFactureWorker.class

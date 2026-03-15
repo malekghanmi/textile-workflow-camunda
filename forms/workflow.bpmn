@@ -1,0 +1,870 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Web Modeler" exporterVersion="dd55451" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
+  <error id="Err1" name="ERPError" errorCode="ERP_ERROR" />
+  <message id="MsgCmd" name="CommandeMatieres" />
+  <message id="MsgLiv" name="LivraisonConfirmee">
+    <extensionElements>
+      <zeebe:subscription correlationKey="=numeroCommande" />
+    </extensionElements>
+  </message>
+  <collaboration id="Collab1">
+    <participant id="PoolUsine" name="Usine Textile" processRef="ProcUsine" />
+    <participant id="PoolFourn" name="Fournisseur" processRef="ProcFourn" />
+    <messageFlow id="MF2" sourceRef="TNotifLiv" targetRef="CELiv" />
+  </collaboration>
+  <process id="ProcUsine" isExecutable="true">
+    <laneSet id="LS1">
+      <lane id="LLog" name="Logistique">
+        <flowNodeRef>TEmb</flowNodeRef>
+        <flowNodeRef>TFac</flowNodeRef>
+        <flowNodeRef>GW6</flowNodeRef>
+        <flowNodeRef>GW7</flowNodeRef>
+        <flowNodeRef>GW4</flowNodeRef>
+        <flowNodeRef>TRel</flowNodeRef>
+        <flowNodeRef>TExp</flowNodeRef>
+        <flowNodeRef>EELiv</flowNodeRef>
+        <flowNodeRef>Event_1ores8j</flowNodeRef>
+      </lane>
+      <lane id="LQlt" name="Controle Qualite">
+        <flowNodeRef>TIns</flowNodeRef>
+        <flowNodeRef>GW3</flowNodeRef>
+      </lane>
+      <lane id="LCtu" name="Atelier Couture">
+        <flowNodeRef>TNtfR</flowNodeRef>
+        <flowNodeRef>EETmr</flowNodeRef>
+        <flowNodeRef>SPFab</flowNodeRef>
+        <flowNodeRef>BTTmr</flowNodeRef>
+      </lane>
+      <lane id="LCpe" name="Atelier Coupe">
+        <flowNodeRef>TDec</flowNodeRef>
+      </lane>
+      <lane id="LERP" name="Systeme ERP">
+        <flowNodeRef>TCalc</flowNodeRef>
+        <flowNodeRef>EEERP</flowNodeRef>
+        <flowNodeRef>GW2</flowNodeRef>
+        <flowNodeRef>TCmdMat</flowNodeRef>
+        <flowNodeRef>TEnvoyerCmd</flowNodeRef>
+        <flowNodeRef>CELiv</flowNodeRef>
+        <flowNodeRef>TIT</flowNodeRef>
+        <flowNodeRef>BEErr</flowNodeRef>
+      </lane>
+      <lane id="LEtu" name="Bureau Etudes">
+        <flowNodeRef>TCon</flowNodeRef>
+        <flowNodeRef>GW5</flowNodeRef>
+      </lane>
+      <lane id="LCom" name="Service Commercial">
+        <flowNodeRef>SERec</flowNodeRef>
+        <flowNodeRef>TEnreg</flowNodeRef>
+        <flowNodeRef>GW1</flowNodeRef>
+        <flowNodeRef>EERej</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="SERec" name="Reception commande">
+      <outgoing>Flow_0mxx23b</outgoing>
+    </startEvent>
+    <userTask id="TEnreg" name="Enregistrer commande">
+      <extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-enregistrer-commande" />
+      </extensionElements>
+      <incoming>Flow_0mxx23b</incoming>
+      <outgoing>f02</outgoing>
+    </userTask>
+    <userTask id="TCon" name="Concevoir modele">
+      <extensionElements>
+        <zeebe:formDefinition formId="form-concevoir-modele" />
+        <zeebe:userTask />
+      </extensionElements>
+      <incoming>f03</incoming>
+      <incoming>fModif</incoming>
+      <outgoing>f04</outgoing>
+    </userTask>
+    <serviceTask id="TCalc" name="Calculer besoins matieres">
+      <extensionElements>
+        <zeebe:taskDefinition type="calculate-material-needs" />
+      </extensionElements>
+      <incoming>f05</incoming>
+      <outgoing>f06</outgoing>
+    </serviceTask>
+    <endEvent id="EEERP" name="Erreur ERP notifiee">
+      <incoming>fErr2</incoming>
+    </endEvent>
+    <exclusiveGateway id="GW2" name="Stock suffisant ?">
+      <incoming>f06</incoming>
+      <outgoing>f07oui</outgoing>
+      <outgoing>f07non</outgoing>
+    </exclusiveGateway>
+    <userTask id="TCmdMat" name="Commander matieres premieres">
+      <extensionElements>
+        <zeebe:formDefinition formId="form-commander-matieres" />
+        <zeebe:userTask />
+      </extensionElements>
+      <incoming>f07non</incoming>
+      <outgoing>f08</outgoing>
+    </userTask>
+    <serviceTask id="TEnvoyerCmd" name="Envoyer commande fournisseur">
+      <extensionElements>
+        <zeebe:taskDefinition type="envoyer-commande-matiere" />
+      </extensionElements>
+      <incoming>f08</incoming>
+      <outgoing>f08b</outgoing>
+    </serviceTask>
+    <intermediateCatchEvent id="CELiv" name="Livraison recue">
+      <incoming>f08b</incoming>
+      <outgoing>f09</outgoing>
+      <messageEventDefinition messageRef="MsgLiv" />
+    </intermediateCatchEvent>
+    <userTask id="TNtfR" name="Notifier responsable production">
+      <extensionElements>
+        <zeebe:formDefinition formId="form-notifier-responsable" />
+        <zeebe:userTask />
+      </extensionElements>
+      <incoming>fTmr</incoming>
+      <outgoing>fTmr2</outgoing>
+    </userTask>
+    <endEvent id="EETmr" name="Delai depasse notifie">
+      <incoming>fTmr2</incoming>
+    </endEvent>
+    <userTask id="TEmb" name="Emballer produit">
+      <extensionElements>
+        <zeebe:formDefinition formId="form-emballer-produit" />
+        <zeebe:userTask />
+      </extensionElements>
+      <incoming>f13</incoming>
+      <outgoing>f14</outgoing>
+    </userTask>
+    <serviceTask id="TFac" name="Generer facture">
+      <extensionElements>
+        <zeebe:taskDefinition type="generate-invoice" />
+      </extensionElements>
+      <incoming>f14</incoming>
+      <incoming>fRelB</incoming>
+      <outgoing>f15</outgoing>
+    </serviceTask>
+    <exclusiveGateway id="GW6" name="Livraison urgente ?">
+      <incoming>f16</incoming>
+      <outgoing>f17a</outgoing>
+      <outgoing>f17b</outgoing>
+    </exclusiveGateway>
+    <exclusiveGateway id="GW7" name="Retour produit ?">
+      <incoming>f18</incoming>
+      <outgoing>f19</outgoing>
+      <outgoing>Flow_12dn5g7</outgoing>
+    </exclusiveGateway>
+    <exclusiveGateway id="GW1" name="Commande valide?">
+      <incoming>f02</incoming>
+      <outgoing>fRej</outgoing>
+      <outgoing>f03</outgoing>
+    </exclusiveGateway>
+    <endEvent id="EERej" name="Commande rejetee">
+      <incoming>fRej</incoming>
+    </endEvent>
+    <exclusiveGateway id="GW5" name="Modification demandee ?">
+      <incoming>f04</incoming>
+      <outgoing>fModif</outgoing>
+      <outgoing>f05</outgoing>
+    </exclusiveGateway>
+    <userTask id="TIT" name="Notifier service IT">
+      <extensionElements>
+        <zeebe:formDefinition formId="form-notifier-service-it" />
+        <zeebe:userTask />
+      </extensionElements>
+      <incoming>fErr</incoming>
+      <outgoing>fErr2</outgoing>
+    </userTask>
+    <exclusiveGateway id="GW4" name="Paiement recu ?">
+      <incoming>f15</incoming>
+      <outgoing>fRelA</outgoing>
+      <outgoing>f16</outgoing>
+    </exclusiveGateway>
+    <userTask id="TRel" name="Relancer client">
+      <extensionElements>
+        <zeebe:formDefinition formId="form-relancer-client" />
+        <zeebe:userTask />
+      </extensionElements>
+      <incoming>fRelA</incoming>
+      <outgoing>fRelB</outgoing>
+    </userTask>
+    <userTask id="TExp" name="Expedier commande">
+      <extensionElements>
+        <zeebe:formDefinition formId="form-expedier-commande" />
+        <zeebe:userTask />
+      </extensionElements>
+      <incoming>f17a</incoming>
+      <incoming>f17b</incoming>
+      <outgoing>f18</outgoing>
+    </userTask>
+    <userTask id="TIns" name="Inspection produit">
+      <extensionElements>
+        <zeebe:formDefinition formId="form-inspection-produit" />
+        <zeebe:userTask />
+      </extensionElements>
+      <incoming>f11</incoming>
+      <incoming>fNC</incoming>
+      <outgoing>f12</outgoing>
+    </userTask>
+    <subProcess id="SPFab" name="Fabrication du Vetement">
+      <incoming>f10</incoming>
+      <outgoing>f11</outgoing>
+      <startEvent id="SPS">
+        <outgoing>sp1</outgoing>
+      </startEvent>
+      <userTask id="SPT1" name="Assemblage pieces">
+        <extensionElements>
+          <zeebe:formDefinition formId="form-assemblage-pieces" />
+          <zeebe:userTask />
+        </extensionElements>
+        <incoming>sp1</incoming>
+        <outgoing>sp2</outgoing>
+      </userTask>
+      <userTask id="SPT2" name="Couture principale">
+        <extensionElements>
+          <zeebe:formDefinition formId="form-couture-principale" />
+          <zeebe:userTask />
+        </extensionElements>
+        <incoming>sp2</incoming>
+        <outgoing>sp3</outgoing>
+      </userTask>
+      <userTask id="SPT3" name="Ajout accessoires">
+        <extensionElements>
+          <zeebe:formDefinition formId="form-ajout-accessoires" />
+          <zeebe:userTask />
+        </extensionElements>
+        <incoming>sp3</incoming>
+        <outgoing>sp4</outgoing>
+      </userTask>
+      <serviceTask id="SPT4" name="MAJ statut production">
+        <extensionElements>
+          <zeebe:taskDefinition type="update-production-status" />
+        </extensionElements>
+        <incoming>sp4</incoming>
+        <outgoing>sp5</outgoing>
+      </serviceTask>
+      <endEvent id="SPE">
+        <incoming>sp5</incoming>
+      </endEvent>
+      <sequenceFlow id="sp1" sourceRef="SPS" targetRef="SPT1" />
+      <sequenceFlow id="sp2" sourceRef="SPT1" targetRef="SPT2" />
+      <sequenceFlow id="sp3" sourceRef="SPT2" targetRef="SPT3" />
+      <sequenceFlow id="sp4" sourceRef="SPT3" targetRef="SPT4" />
+      <sequenceFlow id="sp5" sourceRef="SPT4" targetRef="SPE" />
+    </subProcess>
+    <endEvent id="EELiv" name="Commande livree">
+      <incoming>f19</incoming>
+    </endEvent>
+    <exclusiveGateway id="GW3" name="Produit conforme ?">
+      <incoming>f12</incoming>
+      <outgoing>fNC</outgoing>
+      <outgoing>f13</outgoing>
+    </exclusiveGateway>
+    <endEvent id="Event_1ores8j" name="Commande rejetee">
+      <incoming>Flow_12dn5g7</incoming>
+    </endEvent>
+    <userTask id="TDec" name="Decoupe tissu">
+      <extensionElements>
+        <zeebe:formDefinition formId="form-decoupe-tissu" />
+        <zeebe:userTask />
+      </extensionElements>
+      <incoming>f07oui</incoming>
+      <incoming>f09</incoming>
+      <outgoing>f10</outgoing>
+    </userTask>
+    <boundaryEvent id="BTTmr" name="Timer Boundary Event" cancelActivity="false" attachedToRef="SPFab">
+      <outgoing>fTmr</outgoing>
+      <timerEventDefinition>
+        <timeDuration xsi:type="tFormalExpression">PT2M</timeDuration>
+      </timerEventDefinition>
+    </boundaryEvent>
+    <boundaryEvent id="BEErr" name="Error Boundary Event" attachedToRef="TCalc">
+      <outgoing>fErr</outgoing>
+      <errorEventDefinition errorRef="Err1" />
+    </boundaryEvent>
+    <sequenceFlow id="Flow_0mxx23b" sourceRef="SERec" targetRef="TEnreg" />
+    <sequenceFlow id="f02" sourceRef="TEnreg" targetRef="GW1" />
+    <sequenceFlow id="f03" name="Oui" sourceRef="GW1" targetRef="TCon">
+      <conditionExpression xsi:type="tFormalExpression">=commandeValide=true</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="fModif" name="Oui" sourceRef="GW5" targetRef="TCon">
+      <conditionExpression xsi:type="tFormalExpression">=modif=true</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f04" sourceRef="TCon" targetRef="GW5" />
+    <sequenceFlow id="f05" name="Non" sourceRef="GW5" targetRef="TCalc">
+      <conditionExpression xsi:type="tFormalExpression">=modif=false</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f06" sourceRef="TCalc" targetRef="GW2" />
+    <sequenceFlow id="fErr2" sourceRef="TIT" targetRef="EEERP" />
+    <sequenceFlow id="f07oui" name="Oui" sourceRef="GW2" targetRef="TDec">
+      <conditionExpression xsi:type="tFormalExpression">=stock=true</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f07non" name="Non" sourceRef="GW2" targetRef="TCmdMat">
+      <conditionExpression xsi:type="tFormalExpression">=stock=false</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f08" sourceRef="TCmdMat" targetRef="TEnvoyerCmd" />
+    <sequenceFlow id="f08b" sourceRef="TEnvoyerCmd" targetRef="CELiv" />
+    <sequenceFlow id="f09" sourceRef="CELiv" targetRef="TDec" />
+    <sequenceFlow id="fTmr" sourceRef="BTTmr" targetRef="TNtfR" />
+    <sequenceFlow id="fTmr2" sourceRef="TNtfR" targetRef="EETmr" />
+    <sequenceFlow id="f13" name="Oui" sourceRef="GW3" targetRef="TEmb">
+      <conditionExpression xsi:type="tFormalExpression">=conforme=true</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f14" sourceRef="TEmb" targetRef="TFac" />
+    <sequenceFlow id="fRelB" sourceRef="TRel" targetRef="TFac" />
+    <sequenceFlow id="f15" sourceRef="TFac" targetRef="GW4" />
+    <sequenceFlow id="f16" name="Oui" sourceRef="GW4" targetRef="GW6">
+      <conditionExpression xsi:type="tFormalExpression">=paiement=true</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f17a" name="Urgent" sourceRef="GW6" targetRef="TExp">
+      <conditionExpression xsi:type="tFormalExpression">=urgent=true</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f17b" name="Normal" sourceRef="GW6" targetRef="TExp">
+      <conditionExpression xsi:type="tFormalExpression">=urgent=false</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f18" sourceRef="TExp" targetRef="GW7" />
+    <sequenceFlow id="f19" name="Non" sourceRef="GW7" targetRef="EELiv">
+      <conditionExpression xsi:type="tFormalExpression">=retour=false</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_12dn5g7" name="Oui" sourceRef="GW7" targetRef="Event_1ores8j">
+      <conditionExpression xsi:type="tFormalExpression">=retour=true</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="fRej" name="Non" sourceRef="GW1" targetRef="EERej">
+      <conditionExpression xsi:type="tFormalExpression">=commandeValide=false</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="fErr" sourceRef="BEErr" targetRef="TIT" />
+    <sequenceFlow id="fRelA" name="Non" sourceRef="GW4" targetRef="TRel">
+      <conditionExpression xsi:type="tFormalExpression">=paiement=false</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f11" sourceRef="SPFab" targetRef="TIns" />
+    <sequenceFlow id="fNC" name="Non" sourceRef="GW3" targetRef="TIns">
+      <conditionExpression xsi:type="tFormalExpression">=conforme=false</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="f12" sourceRef="TIns" targetRef="GW3" />
+    <sequenceFlow id="f10" sourceRef="TDec" targetRef="SPFab" />
+  </process>
+  <process id="ProcFourn" isExecutable="true">
+    <laneSet id="LS2">
+      <lane id="LFR" name="Reception Commande">
+        <flowNodeRef>SEFourn</flowNodeRef>
+        <flowNodeRef>TVD</flowNodeRef>
+        <flowNodeRef>TCC</flowNodeRef>
+      </lane>
+      <lane id="LFL" name="Preparation et Livraison">
+        <flowNodeRef>TPM</flowNodeRef>
+        <flowNodeRef>TEM</flowNodeRef>
+        <flowNodeRef>TNotifLiv</flowNodeRef>
+        <flowNodeRef>EEFourn</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="SEFourn" name="Reception commande matieres">
+      <outgoing>ff1</outgoing>
+      <messageEventDefinition messageRef="MsgCmd" />
+    </startEvent>
+    <userTask id="TVD" name="Verifier disponibilite">
+      <extensionElements>
+        <zeebe:formDefinition formId="form-verifier-disponibilite" />
+        <zeebe:userTask />
+      </extensionElements>
+      <incoming>ff1</incoming>
+      <outgoing>ff2</outgoing>
+    </userTask>
+    <serviceTask id="TCC" name="Confirmer commande ERP">
+      <extensionElements>
+        <zeebe:taskDefinition type="confirm-order-erp" />
+      </extensionElements>
+      <incoming>ff2</incoming>
+      <outgoing>ff3</outgoing>
+    </serviceTask>
+    <userTask id="TPM" name="Preparer matieres premieres">
+      <extensionElements>
+        <zeebe:formDefinition formId="form-preparer-matieres" />
+        <zeebe:userTask />
+      </extensionElements>
+      <incoming>ff3</incoming>
+      <outgoing>ff4</outgoing>
+    </userTask>
+    <userTask id="TEM" name="Expedier matieres">
+      <extensionElements>
+        <zeebe:formDefinition formId="form-expedier-matieres" />
+        <zeebe:userTask />
+      </extensionElements>
+      <incoming>ff4</incoming>
+      <outgoing>ff5</outgoing>
+    </userTask>
+    <serviceTask id="TNotifLiv" name="Envoyer notification livraison">
+      <extensionElements>
+        <zeebe:taskDefinition type="send-delivery-notification" />
+      </extensionElements>
+      <incoming>ff5</incoming>
+      <outgoing>ff6</outgoing>
+    </serviceTask>
+    <endEvent id="EEFourn" name="Livraison effectuee">
+      <incoming>ff6</incoming>
+    </endEvent>
+    <sequenceFlow id="ff1" sourceRef="SEFourn" targetRef="TVD" />
+    <sequenceFlow id="ff2" sourceRef="TVD" targetRef="TCC" />
+    <sequenceFlow id="ff3" sourceRef="TCC" targetRef="TPM" />
+    <sequenceFlow id="ff4" sourceRef="TPM" targetRef="TEM" />
+    <sequenceFlow id="ff5" sourceRef="TEM" targetRef="TNotifLiv" />
+    <sequenceFlow id="ff6" sourceRef="TNotifLiv" targetRef="EEFourn" />
+  </process>
+  <bpmndi:BPMNDiagram id="Diag1">
+    <bpmndi:BPMNPlane id="Plane1" bpmnElement="Collab1">
+      <bpmndi:BPMNShape id="shPoolU" bpmnElement="PoolUsine" isHorizontal="true">
+        <dc:Bounds x="175" y="85" width="1920" height="1010" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shLLog" bpmnElement="LLog" isHorizontal="true">
+        <dc:Bounds x="205" y="845" width="1890" height="250" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shLQlt" bpmnElement="LQlt" isHorizontal="true">
+        <dc:Bounds x="205" y="735" width="1890" height="110" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shLCtu" bpmnElement="LCtu" isHorizontal="true">
+        <dc:Bounds x="205" y="575" width="1890" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shLCpe" bpmnElement="LCpe" isHorizontal="true">
+        <dc:Bounds x="205" y="465" width="1890" height="110" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shLERP" bpmnElement="LERP" isHorizontal="true">
+        <dc:Bounds x="205" y="305" width="1890" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shLEtu" bpmnElement="LEtu" isHorizontal="true">
+        <dc:Bounds x="205" y="195" width="1890" height="110" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shLCom" bpmnElement="LCom" isHorizontal="true">
+        <dc:Bounds x="205" y="85" width="1890" height="110" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shSERec" bpmnElement="SERec">
+        <dc:Bounds x="272" y="112" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="263" y="152" width="55" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTEnreg" bpmnElement="TEnreg">
+        <dc:Bounds x="415" y="110" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTCon" bpmnElement="TCon">
+        <dc:Bounds x="415" y="220" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTCalc" bpmnElement="TCalc">
+        <dc:Bounds x="415" y="325" width="130" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shEEERP" bpmnElement="EEERP">
+        <dc:Bounds x="597" y="417" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="587" y="391" width="57" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shGW2" bpmnElement="GW2" isMarkerVisible="true">
+        <dc:Bounds x="780" y="330" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="764" y="318" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTCmdMat" bpmnElement="TCmdMat">
+        <dc:Bounds x="925" y="325" width="130" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTEnvoyerCmd" bpmnElement="TEnvoyerCmd">
+        <dc:Bounds x="1075" y="325" width="130" height="60" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shCELiv" bpmnElement="CELiv">
+        <dc:Bounds x="1257" y="337" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1237" y="318" width="75" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTNtfR" bpmnElement="TNtfR">
+        <dc:Bounds x="1665" y="615" width="140" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shEETmr" bpmnElement="EETmr">
+        <dc:Bounds x="1845" y="627" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1828" y="667" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTEmb" bpmnElement="TEmb">
+        <dc:Bounds x="415" y="895" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTFac" bpmnElement="TFac">
+        <dc:Bounds x="595" y="895" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shGW6" bpmnElement="GW6" isMarkerVisible="true">
+        <dc:Bounds x="965" y="907" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="947" y="881" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shGW7" bpmnElement="GW7" isMarkerVisible="true">
+        <dc:Bounds x="1285" y="907" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1275" y="888" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shGW1" bpmnElement="GW1" isMarkerVisible="true">
+        <dc:Bounds x="610" y="115" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="606" y="86" width="58" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shEERej" bpmnElement="EERej">
+        <dc:Bounds x="787" y="128" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="776" y="168" width="58" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shGW5" bpmnElement="GW5" isMarkerVisible="true">
+        <dc:Bounds x="690" y="225" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="729" y="207" width="62" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTIT" bpmnElement="TIT">
+        <dc:Bounds x="345" y="405" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shGW4" bpmnElement="GW4" isMarkerVisible="true">
+        <dc:Bounds x="780" y="890" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="764" y="878" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTRel" bpmnElement="TRel">
+        <dc:Bounds x="745" y="1005" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTExp" bpmnElement="TExp">
+        <dc:Bounds x="1105" y="902" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTIns" bpmnElement="TIns">
+        <dc:Bounds x="1105" y="745" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shEELiv" bpmnElement="EELiv">
+        <dc:Bounds x="1497" y="914" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1472" y="954" width="87" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shGW3" bpmnElement="GW3" isMarkerVisible="true">
+        <dc:Bounds x="1330" y="770" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1382" y="781" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ores8j_di" bpmnElement="Event_1ores8j">
+        <dc:Bounds x="1292" y="1017" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1281" y="1060" width="58" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTDec" bpmnElement="TDec">
+        <dc:Bounds x="1370" y="490" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shSP" bpmnElement="SPFab" isExpanded="true">
+        <dc:Bounds x="945" y="585" width="640" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shSPS" bpmnElement="SPS">
+        <dc:Bounds x="967" y="627" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shSPT1" bpmnElement="SPT1">
+        <dc:Bounds x="1023" y="615" width="110" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shSPT2" bpmnElement="SPT2">
+        <dc:Bounds x="1153" y="615" width="110" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shSPT3" bpmnElement="SPT3">
+        <dc:Bounds x="1283" y="615" width="110" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shSPT4" bpmnElement="SPT4">
+        <dc:Bounds x="1413" y="615" width="110" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shSPE" bpmnElement="SPE">
+        <dc:Bounds x="1543" y="627" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="esp1" bpmnElement="sp1">
+        <di:waypoint x="1003" y="645" />
+        <di:waypoint x="1023" y="645" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="esp2" bpmnElement="sp2">
+        <di:waypoint x="1133" y="645" />
+        <di:waypoint x="1153" y="645" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="esp3" bpmnElement="sp3">
+        <di:waypoint x="1263" y="645" />
+        <di:waypoint x="1283" y="645" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="esp4" bpmnElement="sp4">
+        <di:waypoint x="1393" y="645" />
+        <di:waypoint x="1413" y="645" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="esp5" bpmnElement="sp5">
+        <di:waypoint x="1523" y="645" />
+        <di:waypoint x="1543" y="645" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="shBTTmr" bpmnElement="BTTmr">
+        <dc:Bounds x="1247" y="687" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1226" y="730" width="78" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shBEErr" bpmnElement="BEErr">
+        <dc:Bounds x="509" y="367" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="490" y="410" width="75" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0mxx23b_di" bpmnElement="Flow_0mxx23b">
+        <di:waypoint x="308" y="130" />
+        <di:waypoint x="415" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef02" bpmnElement="f02">
+        <di:waypoint x="535" y="142" />
+        <di:waypoint x="612" y="142" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef03" bpmnElement="f03">
+        <di:waypoint x="635" y="165" />
+        <di:waypoint x="635" y="235" />
+        <di:waypoint x="535" y="235" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="643" y="214" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="efModif" bpmnElement="fModif">
+        <di:waypoint x="690" y="250" />
+        <di:waypoint x="535" y="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="603" y="238" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef04" bpmnElement="f04">
+        <di:waypoint x="535" y="264" />
+        <di:waypoint x="704" y="264" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef05" bpmnElement="f05">
+        <di:waypoint x="715" y="275" />
+        <di:waypoint x="715" y="335" />
+        <di:waypoint x="550" y="335" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="722" y="300" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef06" bpmnElement="f06">
+        <di:waypoint x="545" y="355" />
+        <di:waypoint x="780" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="efErr2" bpmnElement="fErr2">
+        <di:waypoint x="465" y="435" />
+        <di:waypoint x="597" y="435" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef07oui" bpmnElement="f07oui">
+        <di:waypoint x="805" y="380" />
+        <di:waypoint x="805" y="455" />
+        <di:waypoint x="1430" y="455" />
+        <di:waypoint x="1430" y="490" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="813" y="412" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef07non" bpmnElement="f07non">
+        <di:waypoint x="830" y="355" />
+        <di:waypoint x="925" y="355" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="870" y="337" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef08" bpmnElement="f08">
+        <di:waypoint x="1055" y="355" />
+        <di:waypoint x="1075" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef08b" bpmnElement="f08b">
+        <di:waypoint x="1205" y="355" />
+        <di:waypoint x="1257" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef09" bpmnElement="f09">
+        <di:waypoint x="1275" y="373" />
+        <di:waypoint x="1275" y="432" />
+        <di:waypoint x="1430" y="432" />
+        <di:waypoint x="1430" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="efTmr" bpmnElement="fTmr">
+        <di:waypoint x="1265" y="725" />
+        <di:waypoint x="1735" y="725" />
+        <di:waypoint x="1735" y="675" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="efTmr2" bpmnElement="fTmr2">
+        <di:waypoint x="1805" y="645" />
+        <di:waypoint x="1845" y="645" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef13" bpmnElement="f13">
+        <di:waypoint x="1355" y="820" />
+        <di:waypoint x="1355" y="863" />
+        <di:waypoint x="475" y="863" />
+        <di:waypoint x="475" y="895" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1363" y="839" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef14" bpmnElement="f14">
+        <di:waypoint x="535" y="925" />
+        <di:waypoint x="595" y="925" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="efRelB" bpmnElement="fRelB">
+        <di:waypoint x="745" y="1035" />
+        <di:waypoint x="655" y="1035" />
+        <di:waypoint x="655" y="955" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef15" bpmnElement="f15">
+        <di:waypoint x="715" y="918" />
+        <di:waypoint x="783" y="918" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef16" bpmnElement="f16">
+        <di:waypoint x="830" y="915" />
+        <di:waypoint x="965" y="932" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="856" y="896" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef17a" bpmnElement="f17a">
+        <di:waypoint x="1015" y="932" />
+        <di:waypoint x="1105" y="932" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1036" y="916" width="34" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef17b" bpmnElement="f17b">
+        <di:waypoint x="990" y="957" />
+        <di:waypoint x="990" y="985" />
+        <di:waypoint x="1165" y="985" />
+        <di:waypoint x="1165" y="962" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="997" y="967" width="36" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef18" bpmnElement="f18">
+        <di:waypoint x="1225" y="935" />
+        <di:waypoint x="1288" y="935" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef19" bpmnElement="f19">
+        <di:waypoint x="1335" y="932" />
+        <di:waypoint x="1497" y="932" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1410" y="914" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12dn5g7_di" bpmnElement="Flow_12dn5g7">
+        <di:waypoint x="1310" y="957" />
+        <di:waypoint x="1310" y="1017" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1317" y="978" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="efRej" bpmnElement="fRej">
+        <di:waypoint x="660" y="140" />
+        <di:waypoint x="788" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="717" y="122" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="efErr" bpmnElement="fErr">
+        <di:waypoint x="527" y="403" />
+        <di:waypoint x="527" y="425" />
+        <di:waypoint x="465" y="425" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="efRelA" bpmnElement="fRelA">
+        <di:waypoint x="805" y="940" />
+        <di:waypoint x="805" y="1005" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="812" y="958" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef11" bpmnElement="f11">
+        <di:waypoint x="1265" y="705" />
+        <di:waypoint x="1165" y="745" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="efNC" bpmnElement="fNC">
+        <di:waypoint x="1333" y="792" />
+        <di:waypoint x="1225" y="788" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1269" y="776" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef12" bpmnElement="f12">
+        <di:waypoint x="1225" y="755" />
+        <di:waypoint x="1355" y="755" />
+        <di:waypoint x="1355" y="770" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ef10" bpmnElement="f10">
+        <di:waypoint x="1430" y="550" />
+        <di:waypoint x="1430" y="585" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="shPoolF" bpmnElement="PoolFourn" isHorizontal="true">
+        <dc:Bounds x="175" y="1090" width="1920" height="310" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shLFR" bpmnElement="LFR" isHorizontal="true">
+        <dc:Bounds x="205" y="1090" width="1890" height="155" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shLFL" bpmnElement="LFL" isHorizontal="true">
+        <dc:Bounds x="205" y="1245" width="1890" height="155" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shSEF" bpmnElement="SEFourn">
+        <dc:Bounds x="917" y="1149" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="908" y="1189" width="55" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTVD" bpmnElement="TVD">
+        <dc:Bounds x="1005" y="1137" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTCC" bpmnElement="TCC">
+        <dc:Bounds x="1185" y="1137" width="130" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTPM" bpmnElement="TPM">
+        <dc:Bounds x="1005" y="1292" width="130" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTEM" bpmnElement="TEM">
+        <dc:Bounds x="1195" y="1292" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shTNL" bpmnElement="TNotifLiv">
+        <dc:Bounds x="1375" y="1292" width="140" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shEEF" bpmnElement="EEFourn">
+        <dc:Bounds x="1577" y="1304" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1572" y="1344" width="46" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="eff1" bpmnElement="ff1">
+        <di:waypoint x="953" y="1167" />
+        <di:waypoint x="1005" y="1167" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="eff2" bpmnElement="ff2">
+        <di:waypoint x="1125" y="1167" />
+        <di:waypoint x="1185" y="1167" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="eff3" bpmnElement="ff3">
+        <di:waypoint x="1250" y="1197" />
+        <di:waypoint x="1250" y="1230" />
+        <di:waypoint x="1070" y="1230" />
+        <di:waypoint x="1070" y="1292" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="eff4" bpmnElement="ff4">
+        <di:waypoint x="1135" y="1322" />
+        <di:waypoint x="1195" y="1322" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="eff5" bpmnElement="ff5">
+        <di:waypoint x="1315" y="1322" />
+        <di:waypoint x="1375" y="1322" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="eff6" bpmnElement="ff6">
+        <di:waypoint x="1515" y="1322" />
+        <di:waypoint x="1577" y="1322" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="eMF2" bpmnElement="MF2">
+        <di:waypoint x="1445" y="1292" />
+        <di:waypoint x="1445" y="710" />
+        <di:waypoint x="1275" y="710" />
+        <di:waypoint x="1275" y="370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1320" y="790" width="90" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

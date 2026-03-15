@@ -1,0 +1,113 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "dd55451"
+  },
+  "schemaVersion": 19,
+  "id": "form-relancer-client",
+  "components": [
+    {
+      "text": "# Relance Client - Logistique",
+      "type": "text",
+      "id": "title1"
+    },
+    {
+      "label": "Reference commande",
+      "type": "textfield",
+      "key": "numeroCommande",
+      "readonly": true,
+      "id": "field-numcmd"
+    },
+    {
+      "label": "Nom du client",
+      "type": "textfield",
+      "key": "nomClient",
+      "readonly": true,
+      "id": "field-client"
+    },
+    {
+      "label": "Email du client",
+      "type": "textfield",
+      "key": "emailClient",
+      "readonly": true,
+      "id": "field-email"
+    },
+    {
+      "label": "Montant de la facture (EUR)",
+      "type": "textfield",
+      "key": "montantTotal",
+      "readonly": true,
+      "id": "field-montant"
+    },
+    {
+      "label": "Mode de relance",
+      "values": [
+        {
+          "label": "Email",
+          "value": "email"
+        },
+        {
+          "label": "Telephone",
+          "value": "telephone"
+        },
+        {
+          "label": "Courrier",
+          "value": "courrier"
+        }
+      ],
+      "type": "select",
+      "key": "modeRelance",
+      "validate": {
+        "required": true
+      },
+      "id": "field-mode"
+    },
+    {
+      "subtype": "date",
+      "type": "datetime",
+      "key": "dateRelance",
+      "label": "Date de la relance",
+      "validate": {
+        "required": true
+      },
+      "id": "field-date"
+    },
+    {
+      "label": "Message de relance envoye",
+      "type": "textarea",
+      "key": "messageRelance",
+      "validate": {
+        "required": true
+      },
+      "id": "field-message"
+    },
+    {
+      "label": "Notes complementaires",
+      "type": "textarea",
+      "key": "notesRelance",
+      "id": "field-notes"
+    },
+    {
+      "label": "Paiement recu apres relance ?",
+      "values": [
+        {
+          "label": "✅ Oui - Paiement confirme",
+          "value": true
+        },
+        {
+          "label": "❌ Non - Paiement non recu",
+          "value": false
+        }
+      ],
+      "type": "radio",
+      "key": "paiement",
+      "validate": {
+        "required": true
+      },
+      "id": "field-paiement"
+    }
+  ],
+  "type": "default"
+}
